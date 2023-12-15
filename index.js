@@ -6,13 +6,14 @@ const colors = require('colors');
 const dbConnection = require('./utils/db');
 // port
 const port = process.env.PORT || 5000;
-
+const bmi = require("./routes/bmi.route");
 // Middleware
 app.use(cors());
 app.use(express.json());
 dbConnection()
-
-
+// -------> Routes <-------
+app.use("/api/v1",bmi);
+// -------> Routes <-------
 app.get("/",(req,res)=>{
     res.send("Route Is Working!!")
 })
@@ -22,5 +23,5 @@ app.listen(port,()=>{
 })
 app.all("*", (req, res) => {
     res.send("404 not found")
-    })
+})
 app.use(ErrorHandeler)
