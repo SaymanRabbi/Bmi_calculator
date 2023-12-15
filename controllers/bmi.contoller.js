@@ -1,3 +1,4 @@
+const Bmi = require("../model/Bmi");
 const { CreateBmiService } = require("../services/bmi.services")
 module.exports.CreateBmiController = async (req, res) => {
     try {
@@ -30,5 +31,22 @@ module.exports.CreateBmiController = async (req, res) => {
             error: error.stack
     })
     }
+}
 
+module.exports.GetBmiController = async (req, res) => {
+    try {
+        const { email } = req.params;
+        const bmi = await Bmi.find({ email });
+        res.status(200).json({
+            success: true,
+            message: "BMI fetched successfully",
+            data: bmi
+        })
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            message: error.message,
+            error: error.stack
+        })
+    }
 }
