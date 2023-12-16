@@ -26,16 +26,9 @@ const BmiSchema = new mongoose.Schema({
     category:{
         type:String,
     },
-    
-    email:{
+    token:{
         type:String,
-        required:[true,"Please Enter Your Email"],
-        validate(value){
-            if(!validator.isEmail(value)){
-                throw new Error("Please Enter a valid Email")
-            }
-        }
-    },
+    }
 },{
     timestamps:true
 })
