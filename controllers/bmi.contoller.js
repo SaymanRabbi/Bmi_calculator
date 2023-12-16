@@ -82,3 +82,32 @@ module.exports.UpdateBmiController = async (req, res) => {
         })
     }
 }
+module.exports.DeleteBmiController = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const {email } = req.body;
+        const bmi = await Bmi.findById(id)
+        if(bmi.email !== email){
+            return  res.status(403).json({
+                success: false,
+                message: "Unauthorized please provide your email or you are not able to delete this bmi"
+            })
+        }
+
+        if (!bmi) {
+            throw new Error("BMI not found")
+        }
+        await Bmi.findByIdAndDelete(id);
+        res.status(200).json({
+            success: true,
+            message: "BMI deleted successfully",
+            data: bmi
+        })
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            message: error.message,
+            error: error.stack
+        })
+    }
+}
