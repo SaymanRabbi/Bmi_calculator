@@ -50,3 +50,35 @@ module.exports.GetBmiController = async (req, res) => {
         })
     }
 }
+
+module.exports.UpdateBmiController = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const { height, weight,email } = req.body;
+        if(!height || !weight 
+            || height === "" || weight === ""  || height <= 0 || weight <= 0
+            ){
+            throw new Error("Please Enter Your Height and Weight")
+        }
+        const owner = await Bmi.findById(id)
+        if(owner.email !== email){
+            return  res.status(403).json({
+                success: false,
+                message: "Unauthorized please provide your email or you are not the owner of this bmi"
+            })
+        }
+        const bmiValue = parseFloat(weight) / (((parseFloat(height) *30.48)/100) *( (parseFloat(height)*30.48/100)));
+        const bmi = await Bmi.findByIdAndUpdate(id, { height, weight, bmi:bmiValue }, { new: true });
+        res.status(200).json({
+            success: true,
+            message: "BMI updated successfully",
+            data: bmi
+        })
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            message: error.message,
+            error: error.stack
+        })
+    }
+}
